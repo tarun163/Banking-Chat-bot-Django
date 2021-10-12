@@ -1,10 +1,40 @@
+{% load static %}
+<!doctype html>
+<html>
+
+<head>
+    <title>Django ChatterBot Example</title>
+    <link rel="stylesheet" href="{% static 'css/bootstrap.css' %}" />
+    <link rel="stylesheet" href="{% static 'css/custom.css' %}" />
+</head>
+
+<body>
+
+    {% include 'nav.html' %}
+    <div class="container center">
+        <div class="card " style="width: 25rem; margin:5rem; padding:2rem;">
+            <form action="" method="post">
+                {% csrf_token %}
+                <div style="margin:10px;"><label for="username" class="form-label">Username</label>
+                    <input type="text" name="username" id="username" class=" form-control"> </div>
+                <div style="margin:10px;">
+                    <label for="password" class="form-lable">Password</label>
+                    <input type="password" name="p1" id="password" class=" form-control">
+                </div>
+                <div style="margin:10px;">
+                    <label for="password" class="form-lable">Confirm Password</label>
+                    <input type="password" name="p2" id="password" class=" form-control">
+                </div>
+                <div style="margin:10px;"><label for="email" class="form-label">Email</label>
+                    <input type="email" name="email" id="email" class=" form-control"> </div>
+                <button type="submit" class="btn btn-primary">Sign-in</button>
+                <a href="{% url 'login' %}">Allready have account login</a>
+            </form>
+
+        </div>
+    </div>
 
 
-<form action="" method="post">
-{% csrf_token %}
-    username<input type="text" name="username"> password <input type="password" name="p1"> 
-    confirm password <input type="password" name="p1">Email <input type="Email" name="email">
-    <button type="submit">login</button>
-</form>
+</body>
 
-<a href="{% url 'login' %}">login</a>
+</html>
