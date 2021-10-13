@@ -8,7 +8,9 @@ from chatterbot.ext.django_chatterbot import settings
 from chatterbot.trainers import ListTrainer
 from chatterbot.trainers import ChatterBotCorpusTrainer
 from .models import User, UserAccount, Convers
-from django.contrib.auth import authenticate, login as loginUser
+from django.contrib.auth import authenticate, login as loginUser, logout as logoutUser
+from django.views.decorators.csrf import csrf_exempt
+
 
 class ChatterBotAppView(TemplateView):
     template_name = 'app.html'
@@ -69,7 +71,7 @@ class ChatterBotApiView(View):
         '12',
         'Opps sorry some bank related problems',
         '4',
-        'type of loan you need --> 14)Education  15)Farming  16)Startup  17)Home',
+        'type of loan we providing --> 14)Education-loan  15)Farming-loan  16)Startup-loan  17)Home-loan',
         '14',
         'for more information please visit https://homeloans.sbi/',
         '15',
@@ -80,7 +82,7 @@ class ChatterBotApiView(View):
         'for more information please visit https://homeloans.sbi/',     
     ])
 
-    
+    @csrf_exempt
     def post(self, request, *args, **kwargs):
         input_data = json.loads(request.body.decode('utf-8'))
         if 'text' not in input_data:
@@ -94,13 +96,13 @@ class ChatterBotApiView(View):
         # edit/add username
         if(request.session['num'] == '5'):
             user = request.user
-            ins = User.objects.get(username=user)
+            ins = User.objects.filter(username=user)
             ins.username = input_data['text']
             ins.save()
-            chack = UserAccount.objects.get(name=user)
+            check = UserAccount.objects.filter(name=user)
             if(check is not None):
                 check.name = input_data['text']
-                check.save()
+                check.save()    
             input_data['text'] = '19'
             request.session['num'] = '0'
             response = self.chatterbot.get_response(input_data)
@@ -108,7 +110,7 @@ class ChatterBotApiView(View):
         # add/update email
         if(request.session['num'] == '18'):
             user = request.user 
-            ins = User.objects.get(username=user)
+            ins = User.objects.filter(username=user)
             ins.email = input_data['text']
             ins.save()
             input_data['text'] = '20'
@@ -127,9 +129,9 @@ class ChatterBotApiView(View):
         # register/update phone number
         if(request.session['num'] == '7'):
             user = request.user 
-            ins = UserAccount.objects.get(name=user)
-            ins.mobile = input_data['text']
-            ins.save()
+            ins = UserAccount.objects.filter(name=user).update(mobile=input_data['text'])
+            # ins.mobile = input_data['text']
+            # ins.save()
             input_data['text'] = '22'
             request.session['num'] = '0'
             response = self.chatterbot.get_response(input_data) 
@@ -158,7 +160,7 @@ class ChatterBotApiView(View):
         if(request.session['num'] == '10'):
             user = request.user 
             acc_to = request.session['acc']
-            user_by = UserAccount.objects.get(name=user)
+            user_by = UserAccount.objects.get(name=user)       
             user_to = UserAccount.objects.get(account_num=acc_to)
             if user_to is not None:
                 if(user_by.balance >= int(input_data['text'])):
@@ -220,4 +222,8 @@ def register(request):
         ins.save()
         return redirect('login')
     return render(request, 'register.html')
+
+def logout(request):
+    logoutUser(request)  
+    return redirect('login')  
     

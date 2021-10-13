@@ -24,4 +24,5 @@ urlpatterns = [
     url(r'^api/chatterbot/', ChatterBotApiView.as_view(), name='chatterbot'),
     url(r'^$', views.login, name='login'),
     url(r'^register', views.register, name='register'),
+    url(r'^logout', views.logout, name='logout'),
 ]
