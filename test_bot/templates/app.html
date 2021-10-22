@@ -7,7 +7,11 @@
     <link rel="stylesheet" href="{% static 'css/custom.css' %}"/>
   </head>
   <body>
-
+{% if request.user.is_authenticated %}
+    <script>
+        alert('hello {{ request.user }}');
+    </script>
+    {% endif %}
     {% include 'nav.html' %}
 
     <div class="container">

@@ -9,17 +9,20 @@
 </head>
 
 <body>
-
-    {% include 'nav.html' %}
+    {% if success %}
+    <script>
+        alert('{{ msg }}');
+    </script>
+    {% endif %} {% include 'nav.html' %}
     <div class="container center">
         <div class="card " style="width: 25rem; margin:5rem; padding:2rem;">
             <form action="" method="post">
                 {% csrf_token %}
                 <div style="margin:10px;"><label for="username" class="form-label">Username</label>
-                    <input type="text" name="username" id="username" class=" form-control"> </div>
+                    <input type="text" name="username" id="username" class=" form-control" required> </div>
                 <div style="margin:10px;">
                     <label for="password" class="form-lable">Password</label>
-                    <input type="password" name="password" id="password" class=" form-control">
+                    <input type="password" name="password" id="password" class=" form-control" required>
                 </div>
                 <button type="submit" class="btn btn-outline-primary">login</button> <a href="{% url 'register' %}">register your self</a>
             </form>

@@ -208,19 +208,29 @@ def login(request):
             request.session['num'] = '0'
             loginUser(request, user)
             return redirect('main')
+        else:
+            context = {'success':True, 'msg':'some problems in username or password'}    
+            return render(request, 'login.html', context)
     return render(request, 'login.html')        
 #for register new user
 def register(request):
     if request.method == "POST":
         username = request.POST.get('username')
-        password1 = request.POST.get('p1')
-        password2 = request.POST.get('p2')
-        email = request.POST.get('email')
-        user = User.objects.create_user(username, email, password1)
-        user.save()
-        ins = UserAccount(name=username, account_num='', balance=0, mobile='')
-        ins.save()
-        return redirect('login')
+        user = User.objects.filter(username = username)
+        if user is not None:
+            password1 = request.POST.get('p1')
+            password2 = request.POST.get('p2')
+            email = request.POST.get('email')
+            user = User.objects.create_user(username, email, password1)
+            user.save()
+            ins = UserAccount(name=username, account_num='', balance=0, mobile='')
+            ins.save()
+            context = {'success':True, 'msg':'user register successfully!'}    
+            return render(request, 'login.html', context)
+
+        else:
+            context = {'success':True, 'msg':'username already exist!'}    
+            return render(request, 'register.html', context)      
     return render(request, 'register.html')
 
 def logout(request):
