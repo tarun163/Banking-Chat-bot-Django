@@ -9,7 +9,10 @@
   <body>
 {% if request.user.is_authenticated %}
     <script>
-        alert('hello {{ request.user }}');
+    setTimeout(function() {
+            alert('hello {{ request.user }}');
+        }, 300);
+       
     </script>
     {% endif %}
     {% include 'nav.html' %}

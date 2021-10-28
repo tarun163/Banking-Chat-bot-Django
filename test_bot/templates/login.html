@@ -11,12 +11,14 @@
 <body>
     {% if success %}
     <script>
-        alert('{{ msg }}');
+        setTimeout(function() {
+            alert('{{ msg }}');
+        }, 300);
     </script>
     {% endif %} {% include 'nav.html' %}
     <div class="container center">
         <div class="card " style="width: 25rem; margin:5rem; padding:2rem;">
-            <form action="" method="post">
+            <form action="\" method="post">
                 {% csrf_token %}
                 <div style="margin:10px;"><label for="username" class="form-label">Username</label>
                     <input type="text" name="username" id="username" class=" form-control" required> </div>

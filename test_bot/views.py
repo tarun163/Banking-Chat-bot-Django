@@ -79,7 +79,9 @@ class ChatterBotApiView(View):
         '16',
         'for more information please visit https://homeloans.sbi/',
         '17',
-        'for more information please visit https://homeloans.sbi/',     
+        'for more information please visit https://homeloans.sbi/',  
+        'ok',
+        'thanks... welcome again! '   
     ])
 
     @csrf_exempt
@@ -110,7 +112,7 @@ class ChatterBotApiView(View):
         # add/update email
         if(request.session['num'] == '18'):
             user = request.user 
-            ins = User.objects.filter(username=user)
+            ins = User.objects.get(username=user)
             ins.email = input_data['text']
             ins.save()
             input_data['text'] = '20'
@@ -120,8 +122,16 @@ class ChatterBotApiView(View):
         # register account number    
         if(request.session['num'] == '6'):
             user = request.user
-            ins = UserAccount(name=user, account_num=input_data['text'], balance=0, mobile='0')
-            ins.save()
+            q = UserAccount.objects.get(name = user)
+            print(q)
+            if q is None:
+                ins = UserAccount(name=user, account_num=input_data['text'], balance=0, mobile='0')
+                ins.save()
+            else:
+                ins = UserAccount.objects.get(name=user)
+                ins.account_num = input_data['text']
+                ins.save()
+                    
             input_data['text'] = '21'
             request.session['num'] = '0'
             response = self.chatterbot.get_response(input_data)

@@ -11,7 +11,9 @@
 <body>
     {% if success %}
     <script>
-        alert('{{ msg }}');
+        setTimeout(function() {
+            alert('{{ msg }}');
+        }, 300);
     </script>
     {% endif %} {% include 'nav.html' %}
     <div class="container center">
